@@ -16,7 +16,7 @@ namespace Level
     [System.Serializable]
     public class LevelData
     {
-        public int level;
+        public string level;
         public int[] input;
         public int[] output;
         public string[] commands;
@@ -25,7 +25,7 @@ namespace Level
     }
     public class LevelReader
     {
-        public int level;
+        public string level;
         public int[] input;
         public int[] output;
         public ICommand[] commands;

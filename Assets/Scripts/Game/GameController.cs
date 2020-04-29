@@ -4,17 +4,25 @@ using UnityEngine;
 
 using Level;
 using Command;
+using Interactable;
 
 public class GameController : MonoBehaviour
 {
     private LevelReader levelReader;
+    private InputQueue inputQueue;
+    private OutputQueue outputQueue;
 
     // Start is called before the first frame update
     void Start()
     {
-        levelReader = new LevelReader();
+        this.levelReader = new LevelReader();
+        this.inputQueue = new InputQueue();
 
+        // Read JSON + Store level data
         if (!ReadLevel(Application.dataPath + "/Scripts/Level/Levels/level1.json")) { return; }
+
+        SetInputQueue(this.levelReader.input);
+        this.outputQueue = new OutputQueue(this.inputQueue.length);
     }
 
     // Update is called once per frame
@@ -28,8 +36,9 @@ public class GameController : MonoBehaviour
         return levelReader.Init(path);
     }
 
-    private bool SetInputQueue(int[] input)
+    private bool SetInputQueue(int[] values)
     {
+        inputQueue.Fill(values);
         return true;
     }
 
