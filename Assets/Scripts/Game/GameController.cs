@@ -29,12 +29,6 @@ public class GameController : MonoBehaviour
         this.commandList = new CommandList(this.levelReader.commands);
 
         this.commandQueue = new CommandQueue();
-        this.commandQueue.Insert(0, this.commandList.Get(0));
-        this.commandQueue.Insert(1, this.commandList.Get(1));
-        this.commandQueue.Insert(2, this.commandList.Get(1));
-        this.commandQueue.Insert(3, this.commandList.Get(0));
-        this.commandQueue.Move(3, 2);
-        this.commandQueue.Run();
     }
 
     // Update is called once per frame
