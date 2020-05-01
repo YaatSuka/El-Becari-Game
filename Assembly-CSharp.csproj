@@ -45,8 +45,12 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\Commands\CommandFactory.cs" />
      <Compile Include="Assets\Scripts\Commands\CommandList.cs" />
      <Compile Include="Assets\Scripts\Commands\CommandQueue.cs" />
+     <Compile Include="Assets\Scripts\Commands\ICommand.cs" />
+     <Compile Include="Assets\Scripts\Commands\Input.cs" />
+     <Compile Include="Assets\Scripts\Commands\Output.cs" />
      <Compile Include="Assets\Scripts\Game\GameController.cs" />
      <Compile Include="Assets\Scripts\Interactable\InputQueue.cs" />
      <Compile Include="Assets\Scripts\Interactable\Interactable.cs" />
@@ -54,9 +58,8 @@
      <Compile Include="Assets\Scripts\Interactable\Slot.cs" />
      <Compile Include="Assets\Scripts\Interactable\SlotController.cs" />
      <Compile Include="Assets\Scripts\Level\LevelReader.cs" />
-     <Compile Include="Assets\Scripts\TMP\text_send_path.cs" />
-     <Compile Include="Assets\Scripts\UI\ReturnButton.cs" />
-     <Compile Include="Assets\Scripts\UI\SelectLevel.cs" />
+     <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
+     <Compile Include="Assets\Scripts\Value.cs" />
  <Reference Include="UnityEngine">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.5f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
  </Reference>
