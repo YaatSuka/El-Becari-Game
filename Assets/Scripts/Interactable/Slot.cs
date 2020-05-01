@@ -6,12 +6,14 @@ namespace Interactable
     {
         public string name {get; set;}
         public Vector2 position {get; set;}
+        public int uid;
 
         private Value slot;
 
-        public Slot(Vector2 position, Value value)
+        public Slot(Vector2 position, int uid, Value value)
         {
             this.name = "Slot";
+            this.uid = uid;
             this.slot = value;
             this.position = position;
         }
@@ -25,7 +27,11 @@ namespace Interactable
 
         public Value Take()
         {
-            return this.slot;
+            Value value = this.slot;
+
+            this.slot = null;
+
+            return value;
         }
     }
 }

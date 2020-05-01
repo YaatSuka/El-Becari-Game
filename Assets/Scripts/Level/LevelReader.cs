@@ -61,7 +61,7 @@ namespace Level
                 this.instructions = levelData.instructions;
 
                 // LOGS DEBUG
-                Debug.Log("Level: " + this.level);
+                /* Debug.Log("Level: " + this.level);
 
                 string inputs = "";
                 foreach (int value in this.input) {
@@ -87,7 +87,7 @@ namespace Level
                 foreach(Value slot in this.slots) {
                     Debug.Log("slot[" + slot.uid + "] = " + slot.value);
                 }
-                Debug.Log("Instructions: " + this.instructions);
+                Debug.Log("Instructions: " + this.instructions); */
                 // LOGS DEBUG - END
 
                 return true;

@@ -46,6 +46,8 @@
   </PropertyGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\Commands\CommandFactory.cs" />
+     <Compile Include="Assets\Scripts\Commands\CommandList.cs" />
+     <Compile Include="Assets\Scripts\Commands\CommandQueue.cs" />
      <Compile Include="Assets\Scripts\Commands\ICommand.cs" />
      <Compile Include="Assets\Scripts\Commands\Input.cs" />
      <Compile Include="Assets\Scripts\Commands\Output.cs" />
