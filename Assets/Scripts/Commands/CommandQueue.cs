@@ -6,11 +6,13 @@ namespace Command
     public class CommandQueue
     {
         private Dictionary<int, ICommand> commands = new Dictionary<int, ICommand>();
+        private History history = new History();
 
         public bool Insert(int key, ICommand command)
         {
             if (!this.commands.ContainsKey(key)) {
                 this.commands.Add(key, command);
+                this.history.Save(this.commands);
                 return true;
             }
 
@@ -20,6 +22,8 @@ namespace Command
                 commands[idx + 1] = tmp;
             }
             this.commands.Add(key, command);
+
+            this.history.Save(this.commands);
 
             return true;
         }
@@ -41,12 +45,22 @@ namespace Command
                 this.commands[newKey] = commandToMove;
             }
 
+            this.history.Save(this.commands);
+
             return true;
         }
 
-        public void Undo()
+        public bool Undo()
         {
-            // Undo
+            Dictionary<int, ICommand> state = this.history.Undo();
+
+            if (state == null) {
+                Debug.LogError("Cannot undo");
+                return false;
+            }
+            this.commands = new Dictionary<int, ICommand>(state);
+
+            return true;
         }
 
         public bool Run()
