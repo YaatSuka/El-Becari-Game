@@ -17,6 +17,7 @@ namespace Level
     public class LevelData
     {
         public string level;
+        public string title;
         public int[] input;
         public int[] output;
         public string[] commands;
@@ -26,6 +27,7 @@ namespace Level
     public class LevelReader
     {
         public string level;
+        public string title;
         public int[] input;
         public int[] output;
         public ICommand[] commands;
@@ -41,6 +43,7 @@ namespace Level
                 CommandFactory factory = new CommandFactory();
 
                 this.level = levelData.level;
+                this.title = levelData.title;
                 this.input = levelData.input;
                 this.output = levelData.output;
 
@@ -62,6 +65,7 @@ namespace Level
 
                 // LOGS DEBUG
                 /* Debug.Log("Level: " + this.level);
+                Debug.Log("Title: " + this.title);
 
                 string inputs = "";
                 foreach (int value in this.input) {
