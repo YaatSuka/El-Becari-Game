@@ -53,6 +53,7 @@
      <Compile Include="Assets\Scripts\Commands\Input.cs" />
      <Compile Include="Assets\Scripts\Commands\Output.cs" />
      <Compile Include="Assets\Scripts\Game\GameController.cs" />
+     <Compile Include="Assets\Scripts\Game\InstructionController.cs" />
      <Compile Include="Assets\Scripts\Interactable\InputQueue.cs" />
      <Compile Include="Assets\Scripts\Interactable\Interactable.cs" />
      <Compile Include="Assets\Scripts\Interactable\OutputQueue.cs" />
@@ -64,6 +65,7 @@
      <Compile Include="Assets\Scripts\UI\ReturnButton.cs" />
      <Compile Include="Assets\Scripts\UI\SelectLevel.cs" />
      <Compile Include="Assets\Scripts\Value.cs" />
+     <Compile Include="Assets\Scripts\ValueComponent.cs" />
  <Reference Include="UnityEngine">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.5f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
  </Reference>

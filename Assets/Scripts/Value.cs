@@ -1,4 +1,6 @@
-﻿public class Value
+﻿using UnityEngine;
+
+public class Value
 {
     public Value(int uid, int value)
     {
