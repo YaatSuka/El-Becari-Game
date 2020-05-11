@@ -1,6 +1,6 @@
 {
     "level": "1",
-    "title": "Understand the basics",
+    "title": "UNDERSTAND THE BASICS",
     "input": [1, 2, 3],
     "output": [3, 2, 1],
     "commands": ["Input", "Output"],

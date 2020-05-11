@@ -45,6 +45,7 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\Commands\CommandComponent.cs" />
      <Compile Include="Assets\Scripts\Commands\CommandFactory.cs" />
      <Compile Include="Assets\Scripts\Commands\CommandList.cs" />
      <Compile Include="Assets\Scripts\Commands\CommandQueue.cs" />
@@ -52,6 +53,8 @@
      <Compile Include="Assets\Scripts\Commands\ICommand.cs" />
      <Compile Include="Assets\Scripts\Commands\Input.cs" />
      <Compile Include="Assets\Scripts\Commands\Output.cs" />
+     <Compile Include="Assets\Scripts\DragNDrop\DragHandler.cs" />
+     <Compile Include="Assets\Scripts\DragNDrop\DropHandler.cs" />
      <Compile Include="Assets\Scripts\Game\GameController.cs" />
      <Compile Include="Assets\Scripts\Game\InstructionController.cs" />
      <Compile Include="Assets\Scripts\Interactable\InputQueue.cs" />
@@ -62,6 +65,7 @@
      <Compile Include="Assets\Scripts\Level\LevelReader.cs" />
      <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
      <Compile Include="Assets\Scripts\TMP\text_send_path.cs" />
+     <Compile Include="Assets\Scripts\UI\AppBarController.cs" />
      <Compile Include="Assets\Scripts\UI\ReturnButton.cs" />
      <Compile Include="Assets\Scripts\UI\SelectLevel.cs" />
      <Compile Include="Assets\Scripts\Value.cs" />

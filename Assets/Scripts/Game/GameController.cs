@@ -15,6 +15,8 @@ public class GameController : MonoBehaviour
     private CommandQueue commandQueue;
 
     private GameObject inputQueueObj;
+    private GameObject commandListObj;
+    private GameObject commandQueueObj;
     private GameObject instructionSheet;
 
     // Start is called before the first frame update
@@ -28,16 +30,25 @@ public class GameController : MonoBehaviour
         // Set InputQueueObject
         this.inputQueueObj = GameObject.Find("InputQueue");
         this.inputQueue = this.inputQueueObj.GetComponent<InputQueue>();
-        SetInputQueue(this.levelReader.input);
+        this.inputQueue.Fill(this.levelReader.input);
 
         // Set InstructionSheetObject
         this.instructionSheet = GameObject.Find("InstructionSheet");
         this.instructionSheet.GetComponent<InstructionController>().SetTitle(this.levelReader.title);
         this.instructionSheet.GetComponent<InstructionController>().SetInstructions(this.levelReader.instructions);
 
+        // TODO: Set OutputQueueObject
         this.outputQueue = new OutputQueue(this.inputQueue.length);
 
-        this.commandList = new CommandList(this.levelReader.commands);
+        // Set CommandListObject
+        this.commandListObj = GameObject.Find("CommandList");
+        this.commandList = this.commandListObj.GetComponent<CommandList>();
+        this.commandList.Fill(this.levelReader.commands);
+
+        // Set CommandQueueObject
+        this.commandQueueObj = GameObject.Find("CommandQueue");
+        this.commandQueue = this.commandQueueObj.GetComponent<CommandQueue>();
+        this.commandQueue.Init();
 
         this.commandQueue = new CommandQueue();
     }
@@ -48,19 +59,18 @@ public class GameController : MonoBehaviour
         
     }
 
+    public void RunCommandQueue()
+    {
+        this.commandQueue = this.commandQueueObj.GetComponent<CommandQueue>();
+
+        Debug.Log("CommandQueue running...");
+        if (!this.commandQueue.Run()) {
+            Debug.LogError("Something went wrong while executing the CommandQueue");
+        }
+    }
+
     private bool ReadLevel(string path)
     {
         return levelReader.Init(path);
-    }
-
-    private bool SetInputQueue(int[] values)
-    {
-        this.inputQueue.Fill(values);
-        return true;
-    }
-
-    private bool SetCommandList(ICommand[] commands)
-    {
-        return true;
     }
 }
