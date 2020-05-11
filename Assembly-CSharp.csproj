@@ -63,8 +63,8 @@
      <Compile Include="Assets\Scripts\Interactable\Slot.cs" />
      <Compile Include="Assets\Scripts\Interactable\SlotController.cs" />
      <Compile Include="Assets\Scripts\Level\LevelReader.cs" />
+     <Compile Include="Assets\Scripts\Player\MovementController.cs" />
      <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
-     <Compile Include="Assets\Scripts\TMP\text_send_path.cs" />
      <Compile Include="Assets\Scripts\UI\AppBarController.cs" />
      <Compile Include="Assets\Scripts\UI\ReturnButton.cs" />
      <Compile Include="Assets\Scripts\UI\SelectLevel.cs" />

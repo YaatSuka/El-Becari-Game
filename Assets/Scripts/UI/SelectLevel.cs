@@ -39,7 +39,7 @@ public class SelectLevel : MonoBehaviour
 
     public void LoadGame()
     {
-        PlayerPrefs.SetString("Path", "/Scripts/Level/Levels/level" + Path_Tag +".json");
+        PlayerPrefs.SetString("Path", Application.dataPath + "/Scripts/Level/Levels/level" + Path_Tag +".json");
         SceneManager.LoadScene(2);
     }
 }
