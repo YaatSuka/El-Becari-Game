@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Interactable
+namespace Interactables
 {
     public class InputQueue: MonoBehaviour, Interactable
     {
@@ -11,8 +11,8 @@ namespace Interactable
         public Vector2 startPosition;
         public float gap;
 
-        private Value[] values;
         private Transform[] boxes;
+        private int[] values;
 
         void Start()
         {
@@ -20,62 +20,49 @@ namespace Interactable
             this.position = gameObject.transform.position;
         }
 
-        public bool Put(Value value)
+        public bool Put(Transform box)
         {
             Debug.LogError("Impossible to push in InputQueue");
 
             return false;
         }
 
-        public Value Take()
+        public Transform Take()
         {
-            return Pop();
+            Transform box = null;
+            
+            for (int i = 0; i < this.length; i++) {
+                if (box == null && this.boxes[i] != null) {
+                    box = this.boxes[i];
+                    this.boxes[i] = null;
+                }
+                if (box != null && this.boxes[i] != null) {
+                    this.boxes[i].position += new Vector3(0, this.gap, 0);
+                }
+
+            }
+            
+            if (box == null) {
+                Debug.LogError("InputQueue is empty");
+            }
+            return box;
         }
 
         public void Fill(int[] values)
         {
             int idx = 0;
+            Vector2 position = this.startPosition;
 
             this.length = values.Length;
             this.boxes = new Transform[this.length];
-            this.values = new Value[length];
+            this.values = values;
 
             foreach (int value in values) {
-                this.values[idx] = new Value(idx, value);
-                idx++;
-            }
-
-            this.AddBoxes();
-        }
-
-        public Value Pop()
-        {
-            Value value = null;
-            int idx = 0;
-
-            while (idx < this.length && this.values[idx] == null) { idx++; }
-            if (idx >= length) {
-                Debug.LogError("InputQueue is empty");
-                return null;
-            }
-            
-            value = this.values[idx];
-            this.values[idx] = null;
-
-            return value;
-        }
-
-        private void AddBoxes()
-        {
-            Vector2 position = this.startPosition;
-            int idx = 0;
-
-            foreach (Value value in this.values) {
                 Transform obj = Instantiate(this.prefabs[0], position, this.transform.rotation);
 
-                obj.transform.GetChild(0).GetComponent<TextMesh>().text = value.value.ToString();
                 ValueComponent component = obj.gameObject.AddComponent<ValueComponent>();
-                component.value = value;
+                component.value = new Value(idx, value);
+                obj.transform.GetChild(0).GetComponent<TextMesh>().text = component.value.value.ToString();
                 this.boxes[idx] = obj;
 
                 idx++;
@@ -83,13 +70,40 @@ namespace Interactable
             }
         }
 
+        public void Reset()
+        {
+            for (int i = 0; i < this.length; i++) {
+                if (this.boxes[i] != null) {
+                    Destroy(this.boxes[i].gameObject);
+                    this.boxes[i] = null;
+                }
+            }
+            this.boxes = null;
+            
+            this.Fill(this.values);
+        }
+
+        public int GetNbBoxes()
+        {
+            int i = 0;
+
+            foreach (Transform box in this.boxes) {
+                if (box != null) {
+                    i++;
+                }
+            }
+            
+            return i;
+        }
+
         // Display values content
         public void Log()
         {
             Debug.Log("----- DEBUG InputQueue -----");
-            foreach(Value value in this.values) {
-                if (value != null) {
-                    Debug.Log(value.uid + " => " + value.value);
+            foreach(Transform box in this.boxes) {
+                if (box != null) {
+                    ValueComponent component = box.GetComponent<ValueComponent>();
+                    Debug.Log(component.value.uid + " => " + component.value.value);
                 } else {
                     Debug.Log("null");
                 }

@@ -7,7 +7,7 @@ namespace Command
         public int length = 0;
         public ICommand[] commands;
         public Transform[] prefabs;
-        public float gap = 55f;
+        public float gap = 46f;
 
         private Transform[] tokens;
 
@@ -39,7 +39,7 @@ namespace Command
 
                 obj.SetParent(gameObject.transform);
                 obj.localPosition = position;
-                obj.localScale = new Vector2(1, 1);
+                obj.localScale = new Vector2(0.8f, 0.8f);
                 obj.gameObject.AddComponent<CommandComponent>();
                 obj.GetComponent<CommandComponent>().command = command;
                 obj.GetComponent<CommandComponent>().SetText();

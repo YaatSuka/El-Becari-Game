@@ -1,6 +1,7 @@
 using UnityEngine;
 
 using Player;
+using Interactables;
 
 namespace Command
 {
@@ -10,14 +11,20 @@ namespace Command
         public int[] parameters {get; set;}
         public PlayerController player {get; set;}
 
+        private OutputQueue outputQueue;
+
         public Output()
         {
-            name = "Output";
+            this.name = "Output";
+            this.player = GameObject.Find("Player").GetComponent<PlayerController>();
+            this.outputQueue = GameObject.Find("OutputQueue").GetComponent<OutputQueue>();
         }
 
         bool ICommand.Run()
         {
             Debug.Log("Running Output function...");
+            this.player.interactable = this.outputQueue;
+            this.player.Put();
 
             return true;
         }

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-using Interactable;
+using Interactables;
 
 public class SlotController
 {
@@ -18,7 +18,9 @@ public class SlotController
             //TO DO: Compute position
             Vector2 position = new Vector2(0, 0);
 
-            this.slots[value.uid] = new Slot(position, uid, value);
+            // TO DO: Instantiate boxes
+
+            this.slots[value.uid] = new Slot(position, uid, null);
             uid++;
         }
     }

@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 using Level;
 using Command;
-using Interactable;
+using Interactables;
+using Player;
 
 public class GameController : MonoBehaviour
 {
@@ -13,8 +15,10 @@ public class GameController : MonoBehaviour
     private OutputQueue outputQueue;
     private CommandList commandList;
     private CommandQueue commandQueue;
+    private PlayerController player;
 
     private GameObject inputQueueObj;
+    private GameObject ouputQueueObj;
     private GameObject commandListObj;
     private GameObject commandQueueObj;
     private GameObject instructionSheet;
@@ -37,8 +41,10 @@ public class GameController : MonoBehaviour
         this.instructionSheet.GetComponent<InstructionController>().SetTitle(this.levelReader.title);
         this.instructionSheet.GetComponent<InstructionController>().SetInstructions(this.levelReader.instructions);
 
-        // TODO: Set OutputQueueObject
-        this.outputQueue = new OutputQueue(this.inputQueue.length);
+        // Set OutputQueueObject
+        this.ouputQueueObj = GameObject.Find("OutputQueue");
+        this.outputQueue = this.ouputQueueObj.GetComponent<OutputQueue>();
+        this.outputQueue.Init(this.levelReader.input);
 
         // Set CommandListObject
         this.commandListObj = GameObject.Find("CommandList");
@@ -50,7 +56,7 @@ public class GameController : MonoBehaviour
         this.commandQueue = this.commandQueueObj.GetComponent<CommandQueue>();
         this.commandQueue.Init();
 
-        this.commandQueue = new CommandQueue();
+        this.player = GameObject.Find("Player").GetComponent<PlayerController>();
     }
 
     // Update is called once per frame
@@ -66,6 +72,17 @@ public class GameController : MonoBehaviour
         Debug.Log("CommandQueue running...");
         if (!this.commandQueue.Run()) {
             Debug.LogError("Something went wrong while executing the CommandQueue");
+        }
+        
+        int[] output = this.outputQueue.ExtractOutput();
+
+        if (output.SequenceEqual(this.levelReader.output)) {
+            Debug.Log("CONGRATULATION! YOU SUCCEED!");
+        } else {
+            this.inputQueue.Reset();
+            this.outputQueue.Reset();
+            this.player.Reset();
+            Debug.Log("OH! WRONG OUTPUT...");
         }
     }
 

@@ -1,15 +1,16 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+using Player;
+
 namespace Command
 {
     public class CommandQueue: MonoBehaviour
     {
-        public int maxLength = 4;
+        public int maxLength = 6;
         public Transform prefab;
-        public float gap = 55f;
+        public float gap = 46f;
 
-        private Dictionary<int, ICommand> commands = new Dictionary<int, ICommand>();
         // private History history = new History();
         private Transform[] boxes;
 
@@ -22,10 +23,6 @@ namespace Command
         public void UpdateQueue(GameObject token, GameObject target)
         {
             if (token.transform.parent.name == "CommandList") {
-                if (isFull()) {
-                    Debug.LogError("Impossible to add a command: CommandQueue is full");
-                }
-
                 InsertToken(token, target);
             } else if (token.transform.parent.parent.name == "CommandQueue") {
                 SwitchToken(token.transform.parent.gameObject, target);
@@ -66,48 +63,6 @@ namespace Command
             }
         }
 
-        public bool Insert(int key, ICommand command)
-        {
-            if (!this.commands.ContainsKey(key)) {
-                this.commands.Add(key, command);
-                //this.history.Save(this.commands);
-                return true;
-            }
-
-            for (int idx = this.commands.Count - 1; idx >= key; idx--) {
-                ICommand tmp = this.commands[idx];
-                this.commands.Remove(idx);
-                commands[idx + 1] = tmp;
-            }
-            this.commands.Add(key, command);
-
-            //this.history.Save(this.commands);
-
-            return true;
-        }
-
-        public bool Move(int lastKey, int newKey)
-        {
-            ICommand commandToMove = this.commands[lastKey];
-
-            if (newKey > lastKey) {
-                for (int idx = lastKey; idx < newKey && this.commands.ContainsKey(idx + 1); idx++) {
-                    this.commands[idx] = this.commands[idx + 1];
-                }
-                this.commands[newKey] = commandToMove;
-            }
-            if (newKey < lastKey) {
-                for (int idx = lastKey; idx > newKey; idx--) {
-                    this.commands[idx] = this.commands[idx - 1];
-                }
-                this.commands[newKey] = commandToMove;
-            }
-
-            //this.history.Save(this.commands);
-
-            return true;
-        }
-
         public bool Undo()
         {
             /* Dictionary<int, ICommand> state = this.history.Undo();
@@ -123,12 +78,6 @@ namespace Command
 
         public bool Run()
         {
-            /* for (int i = 0; i < this.commands.Count; i++) {
-                if (!this.commands[i].Run()) {
-                    return false;
-                }
-            } */
-
             foreach (Transform box in this.boxes) {
                 if (box.GetComponent<DropHandler>().token != null) {
                     ICommand command = box.GetComponent<DropHandler>().token.GetComponent<CommandComponent>().command;
@@ -151,6 +100,7 @@ namespace Command
 
                 obj.SetParent(gameObject.transform);
                 obj.localPosition = position;
+                obj.localScale = new Vector2(0.8f, 0.8f);
                 obj.GetComponent<DropHandler>().id = i;
 
                 this.boxes[i] = obj;
@@ -159,25 +109,20 @@ namespace Command
             }
         }
 
-        public bool isFull()
-        {
-            int filled = 0;
-
-            foreach (Transform box in this.boxes) {
-                if (box.GetComponent<DropHandler>().token != null) {
-                    filled++;
-                }
-            }
-
-            return filled == this.maxLength;
-        }
-
         // Log commands in queue
         public void Log()
         {
             Debug.Log("----- DEBUG CommandQueue -----");
-            for (int i = 0; i < this.commands.Count; i++) {
-                Debug.Log("[" + i + "] => " + this.commands[i]);
+            for (int i = 0; i < this.maxLength - 1; i++) {
+                if (this.boxes[i] != null && this.boxes[i].childCount > 0) {
+                    Transform token = this.boxes[i].GetChild(0);
+
+                    if (token != null) {
+                        Debug.Log("[" + i + "] => " + token.GetComponent<CommandComponent>().command.name);
+                    } else {
+                        Debug.Log("NULL");
+                    }
+                }
             }
             Debug.Log("------------------------------");
         }

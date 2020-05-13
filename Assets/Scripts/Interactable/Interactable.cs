@@ -1,13 +1,13 @@
 using UnityEngine;
 
-namespace Interactable
+namespace Interactables
 {
-    interface Interactable
+    public interface Interactable
     {
         string name {get; set;}
         Vector2 position {get; set;}
 
-        Value Take();
-        bool Put(Value box);
+        Transform Take();
+        bool Put(Transform box);
     }
 }
