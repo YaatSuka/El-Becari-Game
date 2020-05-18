@@ -5,15 +5,16 @@ namespace Command
 {
     public class History
     {
-        private SortedList<int, Dictionary<int, ICommand>> states = new SortedList<int, Dictionary<int, ICommand>>();
+        private SortedList<int, ICommand[]> states = new SortedList<int, ICommand[]>();
         private int currentState = 0;
+        private CommandFactory factory = new CommandFactory();
 
-        public History()
+        public History(Transform[] state)
         {
-            this.states.Add(this.currentState, new Dictionary<int, ICommand>());
+            this.AddState(state);
         }
 
-        public Dictionary<int, ICommand> Undo()
+        public ICommand[] Undo()
         {
             if (currentState == 0) {
                 return null;
@@ -22,15 +23,30 @@ namespace Command
             this.states.Remove(this.currentState);
             this.currentState--;
 
-            Dictionary<int, ICommand> tmp = this.states[this.currentState - 1];
-
             return this.states.Values[this.currentState];
         }
 
-        public void Save(Dictionary<int, ICommand> state)
+        public void Save(Transform[] state)
         {
             this.currentState++;
-            this.states.Add(this.currentState, new Dictionary<int, ICommand>(state));
+            this.AddState(state);
+        }
+
+        private void AddState(Transform[] state)
+        {
+            ICommand[] tmp = new ICommand[state.Length];
+            int idx = 0;
+
+            foreach(Transform box in state) {
+                if (box.childCount > 0) {
+                    tmp[idx] = this.factory.Build(box.GetChild(0).GetComponent<CommandComponent>().command.name);
+                } else {
+                    tmp[idx] = null;
+                }
+                idx++;
+            }
+
+            this.states.Add(this.currentState, tmp);
         }
 
         public void Log()
@@ -38,9 +54,13 @@ namespace Command
             Debug.Log("----- DEBUG History -----");
             for (int i = 0; i < this.states.Count; i++) {
                 Debug.Log("[" + i + "]");
-                Dictionary<int, ICommand> tmp = this.states[i];
-                for (int j = 0; j < tmp.Count; j++) {
-                    Debug.Log("\t[" + j + "] => " + tmp[j]);
+                ICommand[] tmp = this.states[i];
+                for (int j = 0; j < tmp.Length; j++) {
+                    if (tmp[j] != null) {
+                        Debug.Log("\t[" + j + "] => " + tmp[j].name);
+                    } else {
+                        Debug.Log("\t[" + j + "] => null");
+                    }
                 }
             }
             Debug.Log("-------------------------");

@@ -11,13 +11,16 @@ namespace Command
         public Transform prefab;
         public float gap = 46f;
 
-        // private History history = new History();
+        private History history;
+        private CommandList commandList;
         private Transform[] boxes;
 
         public void Init()
         {
             this.boxes = new Transform[this.maxLength];
             this.AddTokenBoxes();
+            this.history = new History(this.boxes);
+            this.commandList = GameObject.Find("CommandList").GetComponent<CommandList>();
         }
 
         public void UpdateQueue(GameObject token, GameObject target)
@@ -27,6 +30,8 @@ namespace Command
             } else if (token.transform.parent.parent.name == "CommandQueue") {
                 SwitchToken(token.transform.parent.gameObject, target);
             }
+
+            this.history.Save(this.boxes);
         }
 
         public void SwitchToken(GameObject source, GameObject target)
@@ -53,9 +58,7 @@ namespace Command
             } else {
                 for (int i = this.maxLength - 1; i > dropHandler.id; i--) {
                     GameObject boxToken = this.boxes[i - 1].GetComponent<DropHandler>().token;
-                    Debug.Log(this.boxes[i].GetComponent<DropHandler>().id);
                     if (boxToken != null) {
-                        Debug.Log("Drop");
                         this.boxes[i].GetComponent<DropHandler>().Drop(boxToken);
                     }
                 }
@@ -65,15 +68,40 @@ namespace Command
 
         public bool Undo()
         {
-            /* Dictionary<int, ICommand> state = this.history.Undo();
+            ICommand[] lastState = this.history.Undo();
+            int i = 0;
 
-            if (state == null) {
-                Debug.LogError("Cannot undo");
-                return false;
+            this.Reset();
+            foreach (ICommand command in lastState) {
+                if (command != null) {
+                    GameObject token = this.commandList.Get(command.name);
+                    GameObject target = this.GetBoxById(i);
+                    this.InsertToken(token, target);
+                }
+                i++;
             }
-            this.commands = new Dictionary<int, ICommand>(state); */
 
             return true;
+        }
+
+        private void Reset()
+        {
+            foreach (Transform box in this.boxes) {
+                if (box.childCount > 0) {
+                    Destroy(box.GetChild(0).gameObject);
+                }
+            }
+        }
+
+        private GameObject GetBoxById(int id)
+        {
+            foreach (Transform box in this.boxes) {
+                if (box.GetComponent<DropHandler>().id == id) {
+                    return box.gameObject;
+                }
+            }
+
+            return null;
         }
 
         public bool Run()

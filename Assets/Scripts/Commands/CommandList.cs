@@ -29,6 +29,17 @@ namespace Command
             return commands[index];
         }
 
+        public GameObject Get(string commandName)
+        {
+            foreach (Transform token in this.tokens) {
+                if (token.GetComponent<CommandComponent>().command.name == commandName) {
+                    return token.gameObject;
+                }
+            }
+
+            return null;
+        }
+
         private void AddTokens()
         {
             Vector2 position = new Vector2(0, 0);
