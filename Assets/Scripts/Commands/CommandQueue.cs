@@ -84,7 +84,25 @@ namespace Command
             return true;
         }
 
-        private void Reset()
+        public bool Redo()
+        {
+            ICommand[] nextState = this.history.Redo();
+            int i = 0;
+
+            this.Reset();
+            foreach (ICommand command in nextState) {
+                if (command != null) {
+                    GameObject token = this.commandList.Get(command.name);
+                    GameObject target = this.GetBoxById(i);
+                    this.InsertToken(token, target);
+                }
+                i++;
+            }
+
+            return true;
+        }
+
+        public void Reset()
         {
             foreach (Transform box in this.boxes) {
                 if (box.childCount > 0) {

@@ -29,7 +29,11 @@ public class GameController : MonoBehaviour
         this.levelReader = new LevelReader();
 
         // Read JSON + Store level data
-        if (!ReadLevel(Application.dataPath + "/Scripts/Level/Levels/level1.json")) { return; }
+        if (PlayerPrefs.GetString("Path") == null) {
+            Debug.LogError("No level file found");
+            return;
+        }
+        if (!ReadLevel(PlayerPrefs.GetString("Path"))) { return; }
 
         // Set InputQueueObject
         this.inputQueueObj = GameObject.Find("InputQueue");
@@ -82,6 +86,7 @@ public class GameController : MonoBehaviour
             this.inputQueue.Reset();
             this.outputQueue.Reset();
             this.player.Reset();
+            this.commandQueue.Reset();
             Debug.Log("OH! WRONG OUTPUT...");
         }
     }

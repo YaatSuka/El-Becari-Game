@@ -9,6 +9,7 @@ public class AppBarController : MonoBehaviour
 {
     public Button runButton;
     public Button undoButton;
+    public Button reButton;
 
     private GameController gameController;
     private CommandQueue commandQueue;
@@ -20,9 +21,11 @@ public class AppBarController : MonoBehaviour
         commandQueue = GameObject.Find("CommandQueue").GetComponent<CommandQueue>();
         Button run = runButton.GetComponent<Button>();
         Button undo = undoButton.GetComponent<Button>();
+        Button redo = reButton.GetComponent<Button>();
 
         run.onClick.AddListener(Run);
         undo.onClick.AddListener(Undo);
+        redo.onClick.AddListener(Redo);
     }
 
     void Run()
@@ -33,5 +36,10 @@ public class AppBarController : MonoBehaviour
     void Undo()
     {
         commandQueue.Undo();
+    }
+
+    void Redo()
+    {
+        commandQueue.Redo();
     }
 }

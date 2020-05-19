@@ -20,8 +20,19 @@ namespace Command
                 return null;
             }
 
-            this.states.Remove(this.currentState);
+            //this.states.Remove(this.currentState);
             this.currentState--;
+
+            return this.states.Values[this.currentState];
+        }
+
+        public ICommand[] Redo()
+        {
+            if (currentState == this.states.Count - 1) {
+                return null;
+            }
+
+            this.currentState++;
 
             return this.states.Values[this.currentState];
         }

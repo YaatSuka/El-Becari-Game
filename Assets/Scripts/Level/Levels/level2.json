@@ -1,0 +1,13 @@
+{
+    "level": "2",
+    "title": "UNDERSTAND THE BASICS",
+    "input": [1, 2, 3],
+    "output": [3, 2, 1],
+    "commands": ["Input", "Output"],
+    "slots": [
+        {"index": 0, "value": null},
+        {"index": 1, "value": null},
+        {"index": 2, "value": null}
+    ],
+    "instructions": "Put all the boxes from the input queue to the output queue."
+}

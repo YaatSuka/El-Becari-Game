@@ -75,7 +75,7 @@ namespace Player
         public void Put()
         {
             if (box == null) {
-                Debug.LogError("The chanracter doesn't carry a box");
+                Debug.LogError("The character doesn't carry a box");
                 return;
             }
             if (this.interactable == null) {

@@ -1,13 +1,13 @@
 {
     "level": "1",
-    "title": "UNDERSTAND THE BASICS",
-    "input": [1, 2, 3],
-    "output": [3, 2, 1],
+    "title": "FIRST MOVE",
+    "input": [1],
+    "output": [1],
     "commands": ["Input", "Output"],
     "slots": [
-        {"index": 0, "value": 1},
+        {"index": 0, "value": null},
         {"index": 1, "value": null},
-        {"index": 2, "value": 1}
+        {"index": 2, "value": null}
     ],
-    "instructions": "Put all the elements from the input queue to the output queue."
+    "instructions": "Put the box from the input queue to the output queue."
 }
