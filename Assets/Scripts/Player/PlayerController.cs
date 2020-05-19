@@ -21,10 +21,17 @@ namespace Player
         private Dictionary<string, Vector3> newLocation;
         private Animator anim;
         private List<string> Path;
+        
+        private InputQueue inputQueue;
+        private OutputQueue outputQueue;
 
 
         void Start()
         {
+            
+            inputQueue = GameObject.Find("InputQueue").GetComponent<InputQueue>();
+            outputQueue = GameObject.Find("OutputQueue").GetComponent<OutputQueue>();
+            
             this.startPosition = transform.position;
             newLocation = new Dictionary<string, Vector3>();
             anim = GetComponent<Animator>();
@@ -46,14 +53,32 @@ namespace Player
                 {
                     transform.position = Vector3.MoveTowards(transform.position, newLocation[Path[path_idx]], transitionSpeed * Time.deltaTime);
                 }
+
+                if (this.box)
+                   this.box.position = new Vector2(transform.position.x, transform.position.y - 0.4f);
                 
                 if (transform.position != newLocation[Path[path_idx]])
                     anim.SetInteger("State", 1);
                 else{
                     anim.SetInteger("State", 0);
+                    Select_CMD(Path[path_idx]);
                     path_idx++;
                 }
             } 
+        }
+
+        public void Select_CMD(string Location)
+        {
+            if(Location == "BoxLocation")
+            {
+                this.interactable = inputQueue;
+                Take();
+            }
+            else if (Location == "OutLocation")
+            {
+                this.interactable = outputQueue;
+                Put();
+            }
         }
 
         public void Take()
@@ -66,10 +91,8 @@ namespace Player
                 Debug.LogError("You didn't set an Interactable object");
                 return;
             }
-
-            MoveTo("BoxLocation");
             this.box = this.interactable.Take();
-            this.box.position = new Vector2(transform.position.x, transform.position.y - 0.4f);
+           // this.box.position = new Vector2(transform.position.x, transform.position.y - 0.4f);
         }
 
         public void Put()
@@ -82,8 +105,6 @@ namespace Player
                 Debug.LogError("You didn't set an Interactable object");
                 return;
             }
-
-            MoveTo("OutLocation");
             this.interactable.Put(this.box);
             this.box = null;
         }
@@ -98,13 +119,18 @@ namespace Player
             }
         }
 
-        private void MoveTo(string Location)
+        public void MoveTo(string Location)
         {
+            fillLocation();
             Path.Add(Location);
         }
 
         private void fillLocation()
         {
+            if (newLocation.Count != 0){
+                newLocation.Clear();
+                path_idx = 0;
+            }
             foreach(GameObject Location in GameObject.FindGameObjectsWithTag("location"))
                 newLocation.Add(Location.name, Location.transform.position);
         }

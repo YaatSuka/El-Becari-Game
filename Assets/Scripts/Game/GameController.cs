@@ -23,6 +23,8 @@ public class GameController : MonoBehaviour
     private GameObject commandQueueObj;
     private GameObject instructionSheet;
 
+    private bool isFinish = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -66,7 +68,16 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        checkWinCondition();
+    }
+
+    public void checkWinCondition(){
+        int[] output = this.outputQueue.ExtractOutput();
+
+        if (output.SequenceEqual(this.levelReader.output) && isFinish == false) {
+            Debug.Log("CONGRATULATION! YOU SUCCEED!");
+            isFinish = true;
+        }
     }
 
     public void RunCommandQueue()

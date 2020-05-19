@@ -22,10 +22,12 @@ namespace Command
 
         bool ICommand.Run()
         {
+            Debug.Log("Moving to target");
+            player.MoveTo("BoxLocation");
+
             Debug.Log("Running Input function...");
-            
-            this.player.interactable = this.inputQueue;
-            this.player.Take();
+           // this.player.interactable = this.inputQueue;
+           // this.player.Take();
 
             return true;
         }

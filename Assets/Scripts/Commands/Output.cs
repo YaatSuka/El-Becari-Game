@@ -22,9 +22,12 @@ namespace Command
 
         bool ICommand.Run()
         {
+            Debug.Log("Moving to target");
+            player.MoveTo("OutLocation");
+
             Debug.Log("Running Output function...");
-            this.player.interactable = this.outputQueue;
-            this.player.Put();
+           // this.player.interactable = this.outputQueue;
+           // this.player.Put();
 
             return true;
         }
