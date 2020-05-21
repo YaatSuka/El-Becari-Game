@@ -116,11 +116,7 @@ namespace Player
         {
             if (newLocation.Count != 0) {
                 newLocation.Clear();
-<<<<<<< HEAD
                 // path_idx = 0;
-=======
-                pathIdx = 0;
->>>>>>> 9596f1b658e602add42acb85a3aaad8e50efd8cf
             }
             foreach(GameObject location in GameObject.FindGameObjectsWithTag("location")) {
                 Debug.Log(location.name);
