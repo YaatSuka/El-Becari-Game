@@ -62,11 +62,13 @@ namespace Player
                 
                 if (transform.position != newLocation[path[path_idx]]) {
                     anim.SetInteger("State", 1);
-                } else {
+                } 
+                else {
                     anim.SetInteger("State", 0);
                     callbacks[path_idx]();
                     path_idx++;
                 }
+                anim.speed = transitionSpeed;
             } 
         }
 
@@ -120,12 +122,17 @@ namespace Player
         {
             if (newLocation.Count != 0) {
                 newLocation.Clear();
-                path_idx = 0;
+                // path_idx = 0;
             }
-
             foreach(GameObject location in GameObject.FindGameObjectsWithTag("location")) {
+                Debug.Log(location.name);
                 newLocation.Add(location.name, location.transform.position);
             }
+        }
+
+        public void ChangeSpeed(float speed)
+        {
+            transitionSpeed = speed;
         }
     }
 }
