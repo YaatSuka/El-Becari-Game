@@ -17,12 +17,6 @@ public class GameController : MonoBehaviour
     private CommandQueue commandQueue;
     private PlayerController player;
 
-    private GameObject inputQueueObj;
-    private GameObject ouputQueueObj;
-    private GameObject commandListObj;
-    private GameObject commandQueueObj;
-    private GameObject instructionSheet;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -36,28 +30,24 @@ public class GameController : MonoBehaviour
         if (!ReadLevel(PlayerPrefs.GetString("Path"))) { return; }
 
         // Set InputQueueObject
-        this.inputQueueObj = GameObject.Find("InputQueue");
-        this.inputQueue = this.inputQueueObj.GetComponent<InputQueue>();
+        this.inputQueue = GameObject.Find("InputQueue").GetComponent<InputQueue>();
         this.inputQueue.Fill(this.levelReader.input);
 
         // Set InstructionSheetObject
-        this.instructionSheet = GameObject.Find("InstructionSheet");
-        this.instructionSheet.GetComponent<InstructionController>().SetTitle(this.levelReader.title);
-        this.instructionSheet.GetComponent<InstructionController>().SetInstructions(this.levelReader.instructions);
+        GameObject instructionSheet = GameObject.Find("InstructionSheet");
+        instructionSheet.GetComponent<InstructionController>().SetTitle(this.levelReader.title);
+        instructionSheet.GetComponent<InstructionController>().SetInstructions(this.levelReader.instructions);
 
         // Set OutputQueueObject
-        this.ouputQueueObj = GameObject.Find("OutputQueue");
-        this.outputQueue = this.ouputQueueObj.GetComponent<OutputQueue>();
+        this.outputQueue = GameObject.Find("OutputQueue").GetComponent<OutputQueue>();
         this.outputQueue.Init(this.levelReader.input);
 
         // Set CommandListObject
-        this.commandListObj = GameObject.Find("CommandList");
-        this.commandList = this.commandListObj.GetComponent<CommandList>();
+        this.commandList = GameObject.Find("CommandList").GetComponent<CommandList>();
         this.commandList.Fill(this.levelReader.commands);
 
         // Set CommandQueueObject
-        this.commandQueueObj = GameObject.Find("CommandQueue");
-        this.commandQueue = this.commandQueueObj.GetComponent<CommandQueue>();
+        this.commandQueue = GameObject.Find("CommandQueue").GetComponent<CommandQueue>();
         this.commandQueue.Init();
 
         this.player = GameObject.Find("Player").GetComponent<PlayerController>();
@@ -65,7 +55,7 @@ public class GameController : MonoBehaviour
 
     public void RunCommandQueue()
     {
-        this.commandQueue = this.commandQueueObj.GetComponent<CommandQueue>();
+        this.commandQueue = GameObject.Find("CommandQueue").GetComponent<CommandQueue>();
 
         Debug.Log("CommandQueue running...");
         if (!this.commandQueue.Run(CheckOutput)) {

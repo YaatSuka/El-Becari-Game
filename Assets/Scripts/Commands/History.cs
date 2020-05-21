@@ -57,6 +57,10 @@ namespace Command
                 idx++;
             }
 
+            if (this.states.ContainsKey(this.currentState)) {
+                this.states.Remove(this.currentState);
+            }
+
             this.states.Add(this.currentState, tmp);
         }
 
