@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 using Player;
@@ -8,10 +10,9 @@ namespace Command
     public class Output: ICommand
     {
         public string name {get; set;}
-        public int[] parameters {get; set;}
+        public List<int> parameters {get; set;}
         public PlayerController player {get; set;}
 
-        //public delegate void CommandQueue();
         protected CommandQueue callback;
 
         private OutputQueue outputQueue;
@@ -34,14 +35,17 @@ namespace Command
 
         void Interact()
         {
-            /* Debug.Log("OUTPUT Interact");
-            Debug.Log(this.callback); */
             this.player.interactable = this.outputQueue;
             this.player.Put();
 
             if (this.callback != null) {
                 this.callback.CheckOutput();
             }
+        }
+
+        void ICommand.AddParameter(int parameter)
+        {
+            this.parameters.Add(parameter);
         }
     }
 }

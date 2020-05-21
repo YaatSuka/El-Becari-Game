@@ -63,37 +63,6 @@ namespace Level
 
                 this.instructions = levelData.instructions;
 
-                // LOGS DEBUG
-                /* Debug.Log("Level: " + this.level);
-                Debug.Log("Title: " + this.title);
-
-                string inputs = "";
-                foreach (int value in this.input) {
-                    inputs += value.ToString();
-                    inputs += ", ";
-                }
-                Debug.Log("Input: " + inputs);
-
-                string outputs = "";
-                foreach (int value in this.output) {
-                    outputs += value.ToString();
-                    outputs += ", ";
-                }
-                Debug.Log("Ouput: " + outputs);
-
-                Debug.Log("Commands: ");
-                foreach (ICommand command in this.commands) {
-                    Debug.Log(command.name);
-                    command.Run();
-                }
-
-                Debug.Log("Slots:");
-                foreach(Value slot in this.slots) {
-                    Debug.Log("slot[" + slot.uid + "] = " + slot.value);
-                }
-                Debug.Log("Instructions: " + this.instructions); */
-                // LOGS DEBUG - END
-
                 return true;
             } catch (Exception e) {
                 Debug.LogError("An error occured while parsing JSON level file");

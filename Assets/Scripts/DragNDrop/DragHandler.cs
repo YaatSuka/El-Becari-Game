@@ -37,19 +37,6 @@ public class DragHandler: MonoBehaviour, IPointerDownHandler, IBeginDragHandler,
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        // Debug.Log("OnPointerDown");
+
     }
-
-/*     public GameObject DropInBox(Vector2 position, Transform parent)
-    {
-        GameObject token = Instantiate(gameObject);
-
-        token.transform.SetParent(parent);
-        token.GetComponent<RectTransform>().anchoredPosition = position;
-        token.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
-        token.GetComponent<CanvasGroup>().blocksRaycasts = true;
-        token.GetComponent<CanvasGroup>().alpha = 1f;
-
-        return token;
-    } */
 }
