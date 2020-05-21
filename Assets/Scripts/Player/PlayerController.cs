@@ -119,7 +119,6 @@ namespace Player
                 // path_idx = 0;
             }
             foreach(GameObject location in GameObject.FindGameObjectsWithTag("location")) {
-                Debug.Log(location.name);
                 newLocation.Add(location.name, location.transform.position);
             }
         }

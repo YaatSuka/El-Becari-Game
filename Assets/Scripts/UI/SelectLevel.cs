@@ -21,7 +21,6 @@ public class SelectLevel : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log(Path_Tag);
         GameObject NumText = gameObject.transform.GetChild(0).gameObject;
         GameObject LevelText = gameObject.transform.GetChild(1).gameObject;
 
