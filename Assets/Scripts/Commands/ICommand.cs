@@ -8,6 +8,6 @@ namespace Command
         int[] parameters {get; set;}
         PlayerController player {get; set;}
 
-        bool Run();
+        bool Run(CommandQueue callback);
     }
 }

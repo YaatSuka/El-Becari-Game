@@ -10,6 +10,9 @@ namespace Command
         public string name {get; set;}
         public int[] parameters {get; set;}
         public PlayerController player {get; set;}
+
+        //public delegate void CommandQueue();
+        protected CommandQueue callback;
         
         private InputQueue inputQueue;
 
@@ -20,16 +23,25 @@ namespace Command
             this.inputQueue = GameObject.Find("InputQueue").GetComponent<InputQueue>();
         }
 
-        bool ICommand.Run()
+        bool ICommand.Run(CommandQueue callback)
         {
-            Debug.Log("Moving to target");
-            player.MoveTo("BoxLocation");
+            this.callback = callback;
 
-            Debug.Log("Running Input function...");
-           // this.player.interactable = this.inputQueue;
-           // this.player.Take();
+            player.MoveTo("BoxLocation", Interact);
 
             return true;
+        }
+
+        public void Interact()
+        {
+            /* Debug.Log("INPUT Interact");
+            Debug.Log(this.callback); */
+            this.player.interactable = this.inputQueue;
+            this.player.Take();
+
+            if (this.callback != null) {
+                this.callback.CheckOutput();
+            }
         }
     }
 }

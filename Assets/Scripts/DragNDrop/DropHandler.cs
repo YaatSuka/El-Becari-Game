@@ -8,6 +8,13 @@ public class DropHandler: MonoBehaviour, IDropHandler
     public int id;
     public GameObject token;
 
+    private CommandFactory factory;
+
+    void Start()
+    {
+        factory = new CommandFactory();
+    }
+
     public void OnDrop(PointerEventData eventData)
     {
         if (eventData.pointerDrag != null) {
@@ -41,7 +48,7 @@ public class DropHandler: MonoBehaviour, IDropHandler
     public void DropNew(GameObject source)
     {
         this.token = Instantiate(source);
-        this.token.GetComponent<CommandComponent>().command = source.GetComponent<CommandComponent>().command;
+        this.token .GetComponent<CommandComponent>().command = factory.Build(source.GetComponent<CommandComponent>().command.name);
         this.token.transform.SetParent(transform);
         this.token.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
         this.token.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);

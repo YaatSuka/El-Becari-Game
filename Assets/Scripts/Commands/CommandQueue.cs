@@ -11,6 +11,9 @@ namespace Command
         public Transform prefab;
         public float gap = 46f;
 
+        public delegate void GameController();
+        protected GameController callback;
+
         private History history;
         private CommandList commandList;
         private Transform[] boxes;
@@ -122,19 +125,46 @@ namespace Command
             return null;
         }
 
-        public bool Run()
+        public bool Run(GameController callback)
         {
+            int i = 0;
+            this.callback = callback;
+
             foreach (Transform box in this.boxes) {
                 if (box.GetComponent<DropHandler>().token != null) {
                     ICommand command = box.GetComponent<DropHandler>().token.GetComponent<CommandComponent>().command;
 
-                    if (!command.Run()) {
-                        return false;
+                    //Debug.Log(i + " / " + GetLastIndex());
+                    if (i == GetLastIndex()) {
+                        command.Run(this);
+                    } else {
+                        command.Run(null);
                     }
+                    i++;
                 }
             }
 
             return true;
+        }
+
+        private int GetLastIndex()
+        {
+            int i = 0;
+            int index = -1;
+
+            foreach (Transform box in this.boxes) {
+                if (box.GetComponent<DropHandler>().token != null) {
+                    index = i;
+                }
+                i++;
+            }
+
+            return index;
+        }
+
+        public void CheckOutput()
+        {
+            this.callback();
         }
 
         private void AddTokenBoxes()

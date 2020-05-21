@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Interactables;
+using Command;
 
 namespace Player
 {
@@ -20,7 +21,10 @@ namespace Player
 
         private Dictionary<string, Vector3> newLocation;
         private Animator anim;
-        private List<string> Path;
+        private List<string> path;
+
+        public delegate void ICommand();
+        protected List<ICommand> callbacks;
         
         private InputQueue inputQueue;
         private OutputQueue outputQueue;
@@ -29,56 +33,41 @@ namespace Player
         void Start()
         {
             
-            inputQueue = GameObject.Find("InputQueue").GetComponent<InputQueue>();
-            outputQueue = GameObject.Find("OutputQueue").GetComponent<OutputQueue>();
-            
+            this.inputQueue = GameObject.Find("InputQueue").GetComponent<InputQueue>();
+            this.outputQueue = GameObject.Find("OutputQueue").GetComponent<OutputQueue>();            
             this.startPosition = transform.position;
-            newLocation = new Dictionary<string, Vector3>();
-            anim = GetComponent<Animator>();
-            Path = new List<string>();
-            fillLocation();
+            this.newLocation = new Dictionary<string, Vector3>();
+            this.anim = GetComponent<Animator>();
+            this.path = new List<string>();
+            this.callbacks = new List<ICommand>();
+
+            FillLocation();
         }
 
-        private void FixedUpdate() {
-             if (Path.Count == 0 || Path.Count == path_idx)
-                return;
-            if (Path[path_idx] != "" && newLocation.ContainsKey(Path[path_idx]))
-            {
-                if (transform.position.x <= newLocation["OutLocationAngle"].x - 0.2 && newLocation[Path[path_idx]].x >= -0.6 ||
-                transform.position.y <= newLocation["OutLocationAngle"].y - 0.2 && newLocation[Path[path_idx]].y >= 0)
-                {
+        private void FixedUpdate()
+        {
+            if (path.Count == 0 || path.Count == path_idx) { return; }
+
+            if (path[path_idx] != "" && newLocation.ContainsKey(path[path_idx])) {
+                if (transform.position.x <= newLocation["OutLocationAngle"].x - 0.2 && newLocation[path[path_idx]].x >= -0.6 ||
+                    transform.position.y <= newLocation["OutLocationAngle"].y - 0.2 && newLocation[path[path_idx]].y >= 0) {
                     transform.position = Vector3.MoveTowards(transform.position, newLocation["OutLocationAngle"], transitionSpeed * Time.deltaTime);
-                }
-                else
-                {
-                    transform.position = Vector3.MoveTowards(transform.position, newLocation[Path[path_idx]], transitionSpeed * Time.deltaTime);
+                } else {
+                    transform.position = Vector3.MoveTowards(transform.position, newLocation[path[path_idx]], transitionSpeed * Time.deltaTime);
                 }
 
-                if (this.box)
-                   this.box.position = new Vector2(transform.position.x, transform.position.y - 0.4f);
+                if (this.box) {
+                    this.box.position = new Vector2(transform.position.x, transform.position.y - 0.4f);
+                }
                 
-                if (transform.position != newLocation[Path[path_idx]])
+                if (transform.position != newLocation[path[path_idx]]) {
                     anim.SetInteger("State", 1);
-                else{
+                } else {
                     anim.SetInteger("State", 0);
-                    Select_CMD(Path[path_idx]);
+                    callbacks[path_idx]();
                     path_idx++;
                 }
             } 
-        }
-
-        public void Select_CMD(string Location)
-        {
-            if(Location == "BoxLocation")
-            {
-                this.interactable = inputQueue;
-                Take();
-            }
-            else if (Location == "OutLocation")
-            {
-                this.interactable = outputQueue;
-                Put();
-            }
         }
 
         public void Take()
@@ -92,7 +81,6 @@ namespace Player
                 return;
             }
             this.box = this.interactable.Take();
-           // this.box.position = new Vector2(transform.position.x, transform.position.y - 0.4f);
         }
 
         public void Put()
@@ -113,26 +101,31 @@ namespace Player
         {
             transform.position = this.startPosition;
             this.interactable = null;
+            this.path.Clear();
+            this.callbacks.Clear();
             if (this.box != null) {
                 Destroy(this.box.gameObject);
                 this.box = null;
             }
         }
 
-        public void MoveTo(string Location)
+        public void MoveTo(string location, ICommand callback)
         {
-            fillLocation();
-            Path.Add(Location);
+            FillLocation();
+            path.Add(location);
+            callbacks.Add(callback);
         }
 
-        private void fillLocation()
+        private void FillLocation()
         {
-            if (newLocation.Count != 0){
+            if (newLocation.Count != 0) {
                 newLocation.Clear();
                 path_idx = 0;
             }
-            foreach(GameObject Location in GameObject.FindGameObjectsWithTag("location"))
-                newLocation.Add(Location.name, Location.transform.position);
+
+            foreach(GameObject location in GameObject.FindGameObjectsWithTag("location")) {
+                newLocation.Add(location.name, location.transform.position);
+            }
         }
     }
 }
