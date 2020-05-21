@@ -19,19 +19,6 @@ public class DropHandler: MonoBehaviour, IDropHandler
     {
         if (eventData.pointerDrag != null) {
             transform.parent.GetComponent<CommandQueue>().UpdateQueue(eventData.pointerDrag, gameObject);
-            /* if (eventData.pointerDrag.transform.parent.name == "CommandList") {
-                Debug.Log("CommandList -> CommandQueue");
-                if (token == null) {
-                    Debug.Log("Insert");
-                    this.DropNew(eventData.pointerDrag, new Vector2(0, 0));
-                } else {
-                    Debug.Log("Switch");
-                    Debug.Log(eventData.pointerDrag.transform.parent.name);
-                }
-            }
-            if (eventData.pointerDrag.transform.parent.name == "CommandQueue") {
-                Debug.Log("CommandQueue -> CommandQueue");
-            } */
         }
     }
 

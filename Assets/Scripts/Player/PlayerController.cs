@@ -10,22 +10,16 @@ namespace Player
     public class PlayerController: MonoBehaviour
     {
         public Interactable interactable = null;
-
         public Transform box = null;
+        public float transitionSpeed = 2f;
+        public delegate void ICommand();
 
+        protected List<ICommand> callbacks;
         private Vector3 startPosition;
-        
-        
-        public float transitionSpeed = 2f; 
-        private int path_idx = 0;
-
+        private int pathIdx = 0;
         private Dictionary<string, Vector3> newLocation;
         private Animator anim;
         private List<string> path;
-
-        public delegate void ICommand();
-        protected List<ICommand> callbacks;
-        
         private InputQueue inputQueue;
         private OutputQueue outputQueue;
 
@@ -46,26 +40,26 @@ namespace Player
 
         private void FixedUpdate()
         {
-            if (path.Count == 0 || path.Count == path_idx) { return; }
+            if (path.Count == 0 || path.Count == pathIdx) { return; }
 
-            if (path[path_idx] != "" && newLocation.ContainsKey(path[path_idx])) {
-                if (transform.position.x <= newLocation["OutLocationAngle"].x - 0.2 && newLocation[path[path_idx]].x >= -0.6 ||
-                    transform.position.y <= newLocation["OutLocationAngle"].y - 0.2 && newLocation[path[path_idx]].y >= 0) {
+            if (path[pathIdx] != "" && newLocation.ContainsKey(path[pathIdx])) {
+                if (transform.position.x <= newLocation["OutLocationAngle"].x - 0.2 && newLocation[path[pathIdx]].x >= -0.6 ||
+                    transform.position.y <= newLocation["OutLocationAngle"].y - 0.2 && newLocation[path[pathIdx]].y >= 0) {
                     transform.position = Vector3.MoveTowards(transform.position, newLocation["OutLocationAngle"], transitionSpeed * Time.deltaTime);
                 } else {
-                    transform.position = Vector3.MoveTowards(transform.position, newLocation[path[path_idx]], transitionSpeed * Time.deltaTime);
+                    transform.position = Vector3.MoveTowards(transform.position, newLocation[path[pathIdx]], transitionSpeed * Time.deltaTime);
                 }
 
                 if (this.box) {
                     this.box.position = new Vector2(transform.position.x, transform.position.y - 0.4f);
                 }
                 
-                if (transform.position != newLocation[path[path_idx]]) {
+                if (transform.position != newLocation[path[pathIdx]]) {
                     anim.SetInteger("State", 1);
                 } else {
                     anim.SetInteger("State", 0);
-                    callbacks[path_idx]();
-                    path_idx++;
+                    callbacks[pathIdx]();
+                    pathIdx++;
                 }
             } 
         }
@@ -120,7 +114,7 @@ namespace Player
         {
             if (newLocation.Count != 0) {
                 newLocation.Clear();
-                path_idx = 0;
+                pathIdx = 0;
             }
 
             foreach(GameObject location in GameObject.FindGameObjectsWithTag("location")) {
